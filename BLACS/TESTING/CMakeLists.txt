@@ -2,7 +2,7 @@ set(FTestObj
    blacstest.f btprim.f tools.f)
 
 add_executable(xFbtest ${FTestObj})
-target_link_libraries(xFbtest scalapack)
+target_link_libraries(xFbtest scalapack ${MPI_Fortran_LIBRARIES})
 
 set(CTestObj  
    Cbt.c)
@@ -13,7 +13,7 @@ set_property(
    )
 
 add_executable(xCbtest ${CTestObj} ${FTestObj})
-target_link_libraries(xCbtest scalapack)
+target_link_libraries(xCbtest scalapack ${MPI_Fortran_LIBRARIES})
 
 file(COPY bsbr.dat DESTINATION ${SCALAPACK_BINARY_DIR}/BLACS/TESTING)
 file(COPY bt.dat DESTINATION ${SCALAPACK_BINARY_DIR}/BLACS/TESTING)
