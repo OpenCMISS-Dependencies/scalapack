@@ -7,6 +7,7 @@ if (OPENCMISS_DEPENDENCIES_LIBRARIES)
     set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${OPENCMISS_DEPENDENCIES_LIBRARIES})
 else()
     SET(CMAKE_PREFIX_PATH ../cmake ${CMAKE_PREFIX_PATH})
+    SET(OPENCMISS_DEPENDENCIES_CONFIGS_DIR ${CMAKE_CURRENT_BINARY_DIR})
 endif()
 FIND_PACKAGE(BLAS CONFIG REQUIRED)
 FIND_PACKAGE(LAPACK CONFIG REQUIRED)
@@ -197,6 +198,8 @@ else (UNIX) # Need to separate Fortran and C Code
    add_library(scalapack-F ${pblas-F} ${pbblas} ${ptzblas} ${tools} ${src} ${extra_lapack} )
    target_link_libraries( scalapack-F lapack blas)
 endif (UNIX)
+
+export(TARGETS scalapack FILE ${OPENCMISS_DEPENDENCIES_CONFIGS_DIR}/scalapack-config.cmake)
 
 #
 # TESTING
