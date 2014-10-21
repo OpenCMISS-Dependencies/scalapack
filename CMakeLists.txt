@@ -197,6 +197,7 @@ else (UNIX) # Need to separate Fortran and C Code
    target_link_libraries( scalapack lapack blas)
    add_library(scalapack-F ${pblas-F} ${pbblas} ${ptzblas} ${tools} ${src} ${extra_lapack} )
    target_link_libraries( scalapack-F lapack blas)
+   export(TARGETS scalapack-F FILE ${OPENCMISS_DEPENDENCIES_CONFIGS_DIR}/scalapack-F-config.cmake)
 endif (UNIX)
 
 export(TARGETS scalapack FILE ${OPENCMISS_DEPENDENCIES_CONFIGS_DIR}/scalapack-config.cmake)
