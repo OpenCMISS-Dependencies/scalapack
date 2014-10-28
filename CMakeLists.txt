@@ -4,11 +4,12 @@ project(SCALAPACK C Fortran)
 if (OPENCMISS_DEPENDENCIES_LIBRARIES)
     SET(CMAKE_PREFIX_PATH ${OPENCMISS_DEPENDENCIES_CONFIGS_DIR} ${CMAKE_PREFIX_PATH})
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OPENCMISS_DEPENDENCIES_LIBRARIES})
-    set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${OPENCMISS_DEPENDENCIES_LIBRARIES})
 else()
-    SET(CMAKE_PREFIX_PATH ../cmake ${CMAKE_PREFIX_PATH})
+    SET(CMAKE_PREFIX_PATH ../cmake/release ../cmake/debug ${CMAKE_PREFIX_PATH})
     SET(OPENCMISS_DEPENDENCIES_CONFIGS_DIR ${CMAKE_CURRENT_BINARY_DIR})
+    SET(BUILD_TESTING ON)
 endif()
+
 FIND_PACKAGE(BLAS CONFIG REQUIRED)
 FIND_PACKAGE(LAPACK CONFIG REQUIRED)
 
@@ -92,10 +93,12 @@ endif ()
 
 # --------------------------------------------------
 # Testing
-SET(DART_TESTING_TIMEOUT 600)
-enable_testing()
-include(CTest)
-enable_testing()
+if (BUILD_TESTING)
+    SET(DART_TESTING_TIMEOUT 600)
+    enable_testing()
+    include(CTest)
+    enable_testing()
+endif()
 
 # --------------------------------------------------
 # Organize output files.  On Windows this also keeps .dll files next
@@ -205,4 +208,6 @@ export(TARGETS scalapack FILE ${OPENCMISS_DEPENDENCIES_CONFIGS_DIR}/scalapack-co
 #
 # TESTING
 #
-add_subdirectory(TESTING)
+if (BUILD_TESTING)
+    add_subdirectory(TESTING)
+endif()
