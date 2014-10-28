@@ -1,3 +1,10 @@
 build/
 .svn
 cmake/
+BLACS/INSTALL/Makefile
+BLACS/INSTALL/cmake_install.cmake
+BLACS/INSTALL/xintface
+PBLAS/TESTING/PB_Cabort.c
+PBLAS/TESTING/PB_Cwarn.c
+PBLAS/TIMING/PB_Cabort.c
+PBLAS/TIMING/PB_Cwarn.c
