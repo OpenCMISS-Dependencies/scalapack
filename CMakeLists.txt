@@ -1,15 +1,10 @@
-cmake_minimum_required(VERSION 2.8)
-project(SCALAPACK C Fortran)
+cmake_minimum_required(VERSION 3.0)
+project(SCALAPACK VERSION 2.8 LANGUAGES C Fortran)
 
-if (OPENCMISS_DEPENDENCIES_LIBRARIES)
-    SET(CMAKE_PREFIX_PATH ${OPENCMISS_DEPENDENCIES_CONFIGS_DIR} ${CMAKE_PREFIX_PATH})
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${OPENCMISS_DEPENDENCIES_LIBRARIES})
-else()
-    SET(CMAKE_PREFIX_PATH ../cmake/release ../cmake/debug ${CMAKE_PREFIX_PATH})
-    SET(OPENCMISS_DEPENDENCIES_CONFIGS_DIR ${CMAKE_CURRENT_BINARY_DIR})
-    SET(BUILD_TESTING ON)
-endif()
+option(BUILD_TESTS "${PROJECT_NAME} - Build tests" ON)
+set(BUILD_PRECISION sdcz CACHE STRING "${PROJECT_NAME} - Build precisions (sdcz)")
 
+find_package(MPI REQUIRED)
 FIND_PACKAGE(BLAS CONFIG REQUIRED)
 FIND_PACKAGE(LAPACK CONFIG REQUIRED)
 
@@ -34,7 +29,6 @@ endif ()
 #
 set(CMAKE_PREFIX_PATH "${MPI_BASE_DIR};${CMAKE_PREFIX_PATH}")
 
-find_package(MPI)
 if (MPI_FOUND)
    message(STATUS "Found MPI_LIBRARY : ${MPI_FOUND} ")
    INCLUDE_DIRECTORIES(${MPI_INCLUDE_PATH})
@@ -93,7 +87,7 @@ endif ()
 
 # --------------------------------------------------
 # Testing
-if (BUILD_TESTING)
+if (BUILD_TESTS)
     SET(DART_TESTING_TIMEOUT 600)
     enable_testing()
     include(CTest)
@@ -193,21 +187,28 @@ append_subdir_files(src-C "SRC")
 
 if (UNIX)
    add_library(scalapack ${blacs} ${tools} ${tools-C} ${extra_lapack} ${pblas} ${pblas-F} ${ptzblas} ${ptools} ${pbblas} ${redist} ${src} ${src-C})
-   target_link_libraries( scalapack lapack blas)
+   target_link_libraries(scalapack PUBLIC lapack blas)
 else (UNIX) # Need to separate Fortran and C Code
-   OPTION(BUILD_SHARED_LIBS "Build shared libraries" ON )
+   #OPTION(BUILD_SHARED_LIBS "Build shared libraries" ON )
    add_library(scalapack ${blacs} ${tools-C} ${pblas} ${ptools} ${redist} ${src-C})
-   target_link_libraries( scalapack lapack blas)
+   target_link_libraries( scalapack PUBLIC lapack blas)
    add_library(scalapack-F ${pblas-F} ${pbblas} ${ptzblas} ${tools} ${src} ${extra_lapack} )
-   target_link_libraries( scalapack-F lapack blas)
-   export(TARGETS scalapack-F FILE ${OPENCMISS_DEPENDENCIES_CONFIGS_DIR}/scalapack-F-config.cmake)
+   target_link_libraries( scalapack-F PUBLIC lapack blas)
 endif (UNIX)
 
-export(TARGETS scalapack FILE ${OPENCMISS_DEPENDENCIES_CONFIGS_DIR}/scalapack-config.cmake)
+set_target_properties(scalapack PROPERTIES OUTPUT_NAME scalapack-${SCALAPACK_VERSION})
+
+install(TARGETS scalapack EXPORT scalapack-config
+    DESTINATION lib)
+install(EXPORT scalapack-config DESTINATION lib/cmake/scalapack-${SCALAPACK_VERSION})
+include(CMakePackageConfigHelpers)
+WRITE_BASIC_PACKAGE_VERSION_FILE(${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-version.cmake COMPATIBILITY AnyNewerVersion)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-version.cmake
+    DESTINATION lib/cmake/scalapack-${SCALAPACK_VERSION})
 
 #
 # TESTING
 #
-if (BUILD_TESTING)
+if (BUILD_TESTS)
     add_subdirectory(TESTING)
 endif()

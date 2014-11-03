@@ -140,9 +140,24 @@ set (ZLASRC
    pzunmr3.f pzunmrz.f pzmax1.f pdzsum1.f pzlamr1d.f 
    zdbtf2.f  zdbtrf.f  zdttrf.f zdttrsv.f  zpttrsv.f zsteqr2.f ztrmvt.f 
    zlamsh.f  zlaref.f  zlanv2.f zlahqr2.f pzheevr.f)
-   
-set(src 
-      ${ALLAUX} ${SCLAUX} ${DZLAUX}
-      ${SLASRC} ${CLASRC} ${DLASRC} ${ZLASRC} )
+
+set(src ${ALLAUX})
+if(BUILD_PRECISION MATCHES [s])
+    message(STATUS "Building single precision")
+    list(APPEND src ${SCLAUX} ${SLASRC}) 
+endif()
+if(BUILD_PRECISION MATCHES [d])
+    message(STATUS "Building double precision")
+    list(APPEND src ${DZLAUX} ${DLASRC}) 
+endif()
+if(BUILD_PRECISION MATCHES [c])
+    message(STATUS "Building complex single precision")
+    list(APPEND src ${CLASRC}) 
+endif()
+if(BUILD_PRECISION MATCHES [z])
+    message(STATUS "Building complex double precision")
+    list(APPEND src ${ZLASRC}) 
+endif()
+
 set(src-C 
       ${ALLAUX-C} )

@@ -79,6 +79,3 @@ foreach(src ${srcs})
 endforeach()
 
 set(blacs ${srcs} ${srcs_C} ${internal})
-#add_library(scalapack ${srcs} ${srcs_C} ${internal})
-#scalapack_install_library(scalapack)
-

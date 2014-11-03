@@ -1,99 +1,42 @@
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${SCALAPACK_BINARY_DIR}/TESTING)
 
-set (smatgen psmatgen.f pmatgeninc.f)
-set (dmatgen pdmatgen.f pmatgeninc.f)
-set (cmatgen pcmatgen.f pmatgeninc.f)
-set (zmatgen pzmatgen.f pmatgeninc.f)
-
-add_executable(xsbrd psbrddriver.f psbrdinfo.f psgebdrv.f pslafchk.f ${smatgen})
-add_executable(xdbrd pdbrddriver.f pdbrdinfo.f pdgebdrv.f pdlafchk.f ${dmatgen})
-add_executable(xcbrd pcbrddriver.f pcbrdinfo.f pcgebdrv.f pclafchk.f ${cmatgen})
-add_executable(xzbrd pzbrddriver.f pzbrdinfo.f pzgebdrv.f pzlafchk.f ${zmatgen})
-
-add_executable(xshrd pshrddriver.f pshrdinfo.f psgehdrv.f pslafchk.f ${smatgen})
-add_executable(xdhrd pdhrddriver.f pdhrdinfo.f pdgehdrv.f pdlafchk.f ${dmatgen})
-add_executable(xchrd pchrddriver.f pchrdinfo.f pcgehdrv.f pclafchk.f ${cmatgen})
-add_executable(xzhrd pzhrddriver.f pzhrdinfo.f pzgehdrv.f pzlafchk.f ${zmatgen})
-
-add_executable(xstrd pstrddriver.f psttrdtester.f pslatran.f pstrdinfo.f pssytdrv.f pslafchk.f xpjlaenv.f ${smatgen})
-add_executable(xdtrd pdtrddriver.f pdttrdtester.f pdlatran.f pdtrdinfo.f pdsytdrv.f pdlafchk.f xpjlaenv.f ${dmatgen})
-add_executable(xctrd pctrddriver.f pcttrdtester.f pclatran.f pctrdinfo.f pchetdrv.f pclafchk.f xpjlaenv.f ${cmatgen})
-add_executable(xztrd pztrddriver.f pzttrdtester.f pzlatran.f pztrdinfo.f pzhetdrv.f pzlafchk.f xpjlaenv.f ${zmatgen})
-
-add_executable(xssvd pssvddriver.f pslagge.f pssvdchk.f pssvdcmp.f pssvdtst.f ${smatgen})
-add_executable(xdsvd pdsvddriver.f pdlagge.f pdsvdchk.f pdsvdcmp.f pdsvdtst.f ${dmatgen})
-
-add_executable(xssep psseptst.f pssepsubtst.f pssepchk.f pssepqtq.f pslagsy.f pslatms.f pslasizesep.f pslasizesyevx.f pssepdriver.f pssepreq.f pssepinfo.f pslasizesyev.f pssqpsubtst.f pslasizesqp.f pssdpsubtst.f ${smatgen})
-add_executable(xdsep pdseptst.f pdsepsubtst.f pdsepchk.f pdsepqtq.f pdlagsy.f pdlatms.f pdlasizesep.f pdlasizesyevx.f pdsepdriver.f pdsepreq.f pdsepinfo.f pdlasizesyev.f pdsqpsubtst.f pdlasizesqp.f pdsdpsubtst.f ${dmatgen})
-add_executable(xcsep pcseptst.f pcsepsubtst.f pcsepchk.f pcsepqtq.f pclagsy.f pclatms.f pclasizesep.f pclasizeheevx.f pcsepdriver.f pcsepreq.f pssepinfo.f pcsdpsubtst.f ${cmatgen})
-add_executable(xzsep pzseptst.f pzsepsubtst.f pzsepchk.f pzsepqtq.f pzlagsy.f pzlatms.f pzlasizesep.f pzlasizeheevx.f pzsepdriver.f pzsepreq.f pdsepinfo.f pzsdpsubtst.f ${zmatgen})
-
-add_executable(xsgsep psgseptst.f psgsepsubtst.f psgsepchk.f pslagsy.f pslatms.f pslasizesyevx.f pslasizegsep.f pslasizesep.f psgsepdriver.f psgsepreq.f pssepinfo.f ${smatgen})
-add_executable(xdgsep pdgseptst.f pdgsepsubtst.f pdgsepchk.f pdlagsy.f pdlatms.f pdlasizesyevx.f pdlasizegsep.f pdlasizesep.f pdgsepdriver.f pdgsepreq.f pdsepinfo.f ${dmatgen})
-add_executable(xcgsep pcgseptst.f pcgsepsubtst.f pcgsepchk.f pclagsy.f pclatms.f pclasizegsep.f pclasizeheevx.f pclasizesep.f pcgsepdriver.f pcgsepreq.f pssepinfo.f ${cmatgen})
-add_executable(xzgsep pzgseptst.f pzgsepsubtst.f pzgsepchk.f pzlagsy.f pzlatms.f pzlasizegsep.f pzlasizeheevx.f pzlasizesep.f pzgsepdriver.f pzgsepreq.f pdsepinfo.f ${zmatgen})
-
-add_executable(xsnep psnepdriver.f psnepinfo.f psnepfchk.f ${smatgen})
-add_executable(xdnep pdnepdriver.f pdnepinfo.f pdnepfchk.f ${dmatgen})
-add_executable(xcnep pcnepdriver.f pcnepinfo.f pcnepfchk.f ${cmatgen})
-add_executable(xznep pznepdriver.f pznepinfo.f pznepfchk.f ${zmatgen})
-
-add_executable(xcevc pcevcdriver.f pcevcinfo.f pcget22.f ${cmatgen})
-add_executable(xzevc pzevcdriver.f pzevcinfo.f pzget22.f ${zmatgen})
-
-add_executable(xssyevr pslasizesepr.f pslasizesyevr.f psseprdriver.f psseprreq.f psseprsubtst.f
-pssepchk.f pssepqtq.f pslatms.f psseprtst.f pssepinfo.f pslagsy.f pslasizesep.f ${smatgen})
-add_executable(xdsyevr  pdlasizesepr.f pdlasizesyevr.f pdseprdriver.f pdseprreq.f pdseprsubtst.f
-pdsepchk.f pdsepqtq.f pdlatms.f pdseprtst.f pdsepinfo.f pdlagsy.f pdlasizesep.f ${dmatgen}) 
-add_executable(xcheevr pclasizesepr.f pclasizeheevr.f pcseprdriver.f pcseprreq.f pcseprsubtst.f
-pcsepchk.f pcsepqtq.f pclatms.f pcseprtst.f pssepinfo.f pclagsy.f pclasizesep.f ${cmatgen})
-add_executable(xzheevr  pzlasizesepr.f pzlasizeheevr.f pzseprdriver.f pzseprreq.f pzseprsubtst.f
-pzsepchk.f pzsepqtq.f pzlatms.f pzseprtst.f pdsepinfo.f pzlagsy.f pzlasizesep.f ${zmatgen})
-
-add_executable(xshseqr pshseqrdriver.f psmatgen2.f ${cmatgen})
-add_executable(xdhseqr pdhseqrdriver.f pdmatgen2.f ${cmatgen})
-
-target_link_libraries(xsbrd scalapack lapack blas)
-target_link_libraries(xdbrd scalapack lapack blas)
-target_link_libraries(xcbrd scalapack lapack blas)
-target_link_libraries(xzbrd scalapack lapack blas)
-
-target_link_libraries(xshrd scalapack lapack blas)
-target_link_libraries(xdhrd scalapack lapack blas)
-target_link_libraries(xchrd scalapack lapack blas)
-target_link_libraries(xzhrd scalapack lapack blas)
-
-target_link_libraries(xstrd scalapack lapack blas)
-target_link_libraries(xdtrd scalapack lapack blas)
-target_link_libraries(xctrd scalapack lapack blas)
-target_link_libraries(xztrd scalapack lapack blas)
-
-target_link_libraries(xssvd scalapack lapack blas)
-target_link_libraries(xdsvd scalapack lapack blas)
-
-target_link_libraries(xssep scalapack lapack blas)
-target_link_libraries(xdsep scalapack lapack blas)
-target_link_libraries(xcsep scalapack lapack blas)
-target_link_libraries(xzsep scalapack lapack blas)
-
-target_link_libraries(xsgsep scalapack lapack blas)
-target_link_libraries(xdgsep scalapack lapack blas)
-target_link_libraries(xcgsep scalapack lapack blas)
-target_link_libraries(xzgsep scalapack lapack blas)
-
-target_link_libraries(xsnep scalapack lapack blas)
-target_link_libraries(xdnep scalapack lapack blas)
-target_link_libraries(xcnep scalapack lapack blas)
-target_link_libraries(xznep scalapack lapack blas)
-
-target_link_libraries(xcevc scalapack lapack blas)
-target_link_libraries(xzevc scalapack lapack blas)
-
-target_link_libraries(xssyevr scalapack lapack blas)
-target_link_libraries(xdsyevr scalapack lapack blas)
-target_link_libraries(xcheevr scalapack lapack blas)
-target_link_libraries(xzheevr scalapack lapack blas)
-
-target_link_libraries(xshseqr scalapack lapack blas)
-target_link_libraries(xdhseqr scalapack lapack blas)
-
+foreach(prec s d c z)
+    if(BUILD_PRECISION MATCHES [${prec}])
+        set (matgen p${prec}matgen.f pmatgeninc.f)
+        add_executable(x${prec}brd p${prec}brddriver.f p${prec}brdinfo.f p${prec}gebdrv.f p${prec}lafchk.f ${matgen})
+        add_executable(x${prec}hrd p${prec}hrddriver.f p${prec}hrdinfo.f p${prec}gehdrv.f p${prec}lafchk.f ${matgen})
+        add_executable(x${prec}trd p${prec}trddriver.f p${prec}ttrdtester.f p${prec}latran.f p${prec}trdinfo.f p${prec}sytdrv.f p${prec}lafchk.f xpjlaenv.f ${matgen})
+        add_executable(x${prec}sep p${prec}septst.f p${prec}sepsubtst.f p${prec}sepchk.f p${prec}sepqtq.f p${prec}lagsy.f p${prec}latms.f p${prec}lasizesep.f p${prec}lasizesyevx.f p${prec}sepdriver.f p${prec}sepreq.f p${prec}sepinfo.f p${prec}lasizesyev.f p${prec}sqpsubtst.f p${prec}lasizesqp.f p${prec}sdpsubtst.f ${matgen})
+        add_executable(x${prec}gsep p${prec}gseptst.f p${prec}gsepsubtst.f p${prec}gsepchk.f p${prec}lagsy.f p${prec}latms.f p${prec}lasizesyevx.f p${prec}lasizegsep.f p${prec}lasizesep.f p${prec}gsepdriver.f p${prec}gsepreq.f p${prec}sepinfo.f ${matgen})
+        add_executable(x${prec}nep p${prec}nepdriver.f p${prec}nepinfo.f p${prec}nepfchk.f ${matgen})
+        add_executable(x${prec}syevr p${prec}lasizesepr.f p${prec}lasizesyevr.f p${prec}seprdriver.f p${prec}seprreq.f p${prec}seprsubtst.f
+            p${prec}sepchk.f p${prec}sepqtq.f p${prec}latms.f p${prec}seprtst.f p${prec}sepinfo.f p${prec}lagsy.f p${prec}lasizesep.f ${matgen})
+        target_link_libraries(x${prec}brd scalapack lapack blas)
+        target_link_libraries(x${prec}hrd scalapack lapack blas)
+        target_link_libraries(x${prec}trd scalapack lapack blas)
+        target_link_libraries(x${prec}sep scalapack lapack blas)
+        target_link_libraries(x${prec}gsep scalapack lapack blas)
+        target_link_libraries(x${prec}nep scalapack lapack blas)
+        target_link_libraries(x${prec}syevr scalapack lapack blas)
+    endif()
+endforeach()
+if(BUILD_PRECISION MATCHES [s])
+    add_executable(xssvd pssvddriver.f pslagge.f pssvdchk.f pssvdcmp.f pssvdtst.f psmatgen.f pmatgeninc.f)
+    target_link_libraries(xssvd scalapack lapack blas)
+    add_executable(xshseqr pshseqrdriver.f psmatgen2.f pcmatgen.f pmatgeninc.f)
+    target_link_libraries(xshseqr scalapack lapack blas)
+endif()
+if(BUILD_PRECISION MATCHES [d])
+    add_executable(xdsvd pdsvddriver.f pdlagge.f pdsvdchk.f pdsvdcmp.f pdsvdtst.f pdmatgen.f pmatgeninc.f)
+    target_link_libraries(xdsvd scalapack lapack blas)
+    add_executable(xdhseqr pdhseqrdriver.f pdmatgen2.f pcmatgen.f pmatgeninc.f)
+    target_link_libraries(xdhseqr scalapack lapack blas)
+endif()
+if(BUILD_PRECISION MATCHES [c])
+    add_executable(xcevc pcevcdriver.f pcevcinfo.f pcget22.f pcmatgen.f pmatgeninc.f)
+    target_link_libraries(xcevc scalapack lapack blas)
+endif()
+if(BUILD_PRECISION MATCHES [z])
+    add_executable(xzevc pzevcdriver.f pzevcinfo.f pzget22.f pzmatgen.f pmatgeninc.f)
+    target_link_libraries(xzevc scalapack lapack blas)
+endif()

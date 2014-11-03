@@ -1,4 +1,4 @@
 add_subdirectory(SRC)
-if(BUILD_TESTING)
+if(BUILD_TESTS)
   add_subdirectory(TESTING)
-endif(BUILD_TESTING)
+endif(BUILD_TESTS)
