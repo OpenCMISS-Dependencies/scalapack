@@ -4,11 +4,12 @@ project(SCALAPACK VERSION 2.8 LANGUAGES C Fortran)
 option(BUILD_TESTS "${PROJECT_NAME} - Build tests" ON)
 set(BUILD_PRECISION sdcz CACHE STRING "${PROJECT_NAME} - Build precisions (sdcz)")
 
+# Always build single precision (used by some tests [e.g. PETSc] and examples)
 set(BUILD_PRECISION "s${BUILD_PRECISION}")
 
 find_package(MPI REQUIRED)
-FIND_PACKAGE(BLAS CONFIG REQUIRED)
-FIND_PACKAGE(LAPACK CONFIG REQUIRED)
+find_package(BLAS ${BLAS_VERSION} CONFIG REQUIRED)
+find_package(LAPACK ${LAPACK_VERSION} CONFIG REQUIRED)
 
 # Configure the warning and code coverage suppression file
 configure_file( 
@@ -202,11 +203,11 @@ set_target_properties(scalapack PROPERTIES OUTPUT_NAME scalapack-${SCALAPACK_VER
 
 install(TARGETS scalapack EXPORT scalapack-config
     DESTINATION lib)
-install(EXPORT scalapack-config DESTINATION lib/cmake/scalapack-${SCALAPACK_VERSION})
+install(EXPORT scalapack-config DESTINATION lib/cmake)
 include(CMakePackageConfigHelpers)
 WRITE_BASIC_PACKAGE_VERSION_FILE(${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-version.cmake COMPATIBILITY AnyNewerVersion)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-version.cmake
-    DESTINATION lib/cmake/scalapack-${SCALAPACK_VERSION})
+    DESTINATION lib/cmake)
 
 #
 # TESTING
