@@ -8,8 +8,8 @@ set(BUILD_PRECISION sdcz CACHE STRING "${PROJECT_NAME} - Build precisions (sdcz)
 set(BUILD_PRECISION "s${BUILD_PRECISION}")
 
 find_package(MPI REQUIRED)
-find_package(BLAS ${BLAS_VERSION} CONFIG REQUIRED)
-find_package(LAPACK ${LAPACK_VERSION} CONFIG REQUIRED)
+find_package(BLAS ${BLAS_VERSION} REQUIRED)
+find_package(LAPACK ${LAPACK_VERSION} REQUIRED)
 
 # Configure the warning and code coverage suppression file
 configure_file( 
