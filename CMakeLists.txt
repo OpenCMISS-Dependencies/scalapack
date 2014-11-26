@@ -128,11 +128,6 @@ if (NOT LAPACK_FOUND)
 endif()
 
 # --------------------------------------------------
-# By default static library
-SET(BUILD_SHARED_LIBS OFF)
-SET(BUILD_STATIC_LIBS ON)
-
-# --------------------------------------------------
 # Subdirectories that need to be processed
    
 macro(append_subdir_files variable dirname)
