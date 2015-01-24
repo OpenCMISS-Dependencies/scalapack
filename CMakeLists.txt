@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 project(SCALAPACK VERSION 2.8 LANGUAGES C Fortran)
 
 option(BUILD_TESTS "${PROJECT_NAME} - Build tests" ON)
+option(FORTRAN_MANGLING "${PROJECT_NAME} - Fortran mangling scheme" Add_)
 set(BUILD_PRECISION sdcz CACHE STRING "${PROJECT_NAME} - Build precisions (sdcz)")
 
 # Always build single precision (used by some tests [e.g. PETSc] and examples)
@@ -24,54 +25,18 @@ set(CMAKE_MODULE_PATH "${SCALAPACK_SOURCE_DIR}/CMAKE" ${CMAKE_MODULE_PATH})
 #
 #   MPI
 #
-#set(CMAKE_PREFIX_PATH "${MPI_BASE_DIR};${CMAKE_PREFIX_PATH}")
-
-#if (MPI_FOUND)
-#   message(STATUS "Found MPI_LIBRARY : ${MPI_FOUND} ")
+if (MPI_FOUND)
    INCLUDE_DIRECTORIES(${MPI_INCLUDE_PATH})
-
-#   find_program(MPI_C_COMPILER
-#      NAMES mpicc
-#      HINTS "${MPI_BASE_DIR}"
-#      PATH_SUFFIXES bin
-#      DOC "MPI C compiler.")
-#   MARK_AS_ADVANCED(MPI_C_COMPILER)
-#   if ("${MPI_C_COMPILER}" STREQUAL "MPI_C_COMPILER-NOTFOUND")
-#      message(ERROR "--> MPI C Compiler NOT FOUND (please set MPI_BASE_DIR accordingly")
-#   else()
-#      message(STATUS "--> MPI C Compiler : ${MPI_C_COMPILER}")
+   if (MPI_C_COMPILER)
       SET(CMAKE_C_COMPILER "${MPI_C_COMPILER}")
       message(STATUS "--> C Compiler : ${CMAKE_C_COMPILER}")
-#   endif()
-#   find_program(MPI_Fortran_COMPILER
-#      NAMES mpif77
-#      HINTS "${MPI_BASE_DIR}"
-#      PATH_SUFFIXES bin
-#      DOC "MPI Fortran compiler.")
-#   MARK_AS_ADVANCED(MPI_Fortran_COMPILER)
-#   if ("${MPI_Fortran_COMPILER}" STREQUAL "MPI_Fortran_COMPILER-NOTFOUND")
-#      message(ERROR "--> MPI Fortran Compiler NOT FOUND (please set MPI_BASE_DIR accordingly")
-#   else()
-#      message(STATUS "--> MPI Fortran Compiler : ${MPI_Fortran_COMPILER}")
+   endif()
+   if (MPI_Fortran_COMPILER)
       SET(Fortran_COMPILER "${CMAKE_Fortran_COMPILER}")
       SET(CMAKE_Fortran_COMPILER "${MPI_Fortran_COMPILER}")
       message(STATUS "--> Fortran Compiler : ${CMAKE_Fortran_COMPILER}")
-#   endif()
-   
-#else()
-#   message(STATUS "Found MPI_LIBRARY : ${MPI_FOUND} ")
-#   set(MPI_BASE_DIR ${MPI_BASE_DIR} CACHE PATH "MPI Path")
-#   UNSET(MPIEXEC CACHE)
-#   UNSET(MPIEXEC_POSTFLAGS CACHE)
-#   UNSET(MPIEXEC_PREFLAGS CACHE)
-#   UNSET(MPIEXEC_MAX_NUMPROCS CACHE)
-#   UNSET(MPIEXEC_NUMPROC_FLAG CACHE)
-#   UNSET(MPI_COMPILE_FLAGS CACHE)
-#   UNSET(MPI_LINK_FLAGS CACHE)
-#   UNSET(MPI_INCLUDE_PATH CACHE)
-#   message(FATAL_ERROR "--> MPI Library NOT FOUND -- please set MPI_BASE_DIR accordingly --")
-#endif()
-
+   endif()
+endif()
 
 if (UNIX)
    if ( "${CMAKE_Fortran_COMPILER}" MATCHES "ifort" )
@@ -95,7 +60,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${SCALAPACK_BINARY_DIR}/TESTING)
 
 # --------------------------------------------------
 # Check for any necessary platform specific compiler flags
-include( CheckBLACSCompilerFlags )
+include(CheckBLACSCompilerFlags )
 CheckBLACSCompilerFlags()
 
 set(prefix ${CMAKE_INSTALL_PREFIX})
@@ -107,13 +72,11 @@ set(PKG_CONFIG_DIR ${libdir}/pkgconfig)
 #
 #   Fortran Mangling, MPI Tests and BLACS settings
 #
-include(FortranMangling)
-COMPILE(install_COMPILED)
-FORTRAN_MANGLING(CDEFS)
 
 # --------------------------------------------------
 # Compiler Flags
-ADD_DEFINITIONS( "-D${CDEFS}")
+#ADD_DEFINITIONS("-D${FORTRAN_MANGLING}")
+ADD_DEFINITIONS("-DNoChange")
 
 # --------------------------------------------------
 # ScaLAPACK needs BLAS and LAPACK
@@ -178,13 +141,13 @@ if (UNIX)
    add_library(scalapack ${blacs} ${tools} ${tools-C} ${extra_lapack} ${pblas} ${pblas-F} ${ptzblas} ${ptools} ${pbblas} ${redist} ${src} ${src-C})
    target_link_libraries(scalapack PUBLIC lapack blas
        ${MPI_C_LIBRARIES} ${MPI_Fortran_LIBRARIES})
-else (UNIX) # Need to separate Fortran and C Code
+else() # Need to separate Fortran and C Code
    #OPTION(BUILD_SHARED_LIBS "Build shared libraries" ON )
    add_library(scalapack ${blacs} ${tools-C} ${pblas} ${ptools} ${redist} ${src-C})
    target_link_libraries( scalapack PUBLIC lapack blas ${MPI_C_LIBRARIES} ${MPI_Fortran_LIBRARIES})
    add_library(scalapack-F ${pblas-F} ${pbblas} ${ptzblas} ${tools} ${src} ${extra_lapack} )
    target_link_libraries( scalapack-F PUBLIC lapack blas ${MPI_C_LIBRARIES} ${MPI_Fortran_LIBRARIES})
-endif (UNIX)
+endif()
 
 set_target_properties(scalapack PROPERTIES OUTPUT_NAME scalapack-${SCALAPACK_VERSION})
 
