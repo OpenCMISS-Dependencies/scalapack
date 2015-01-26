@@ -75,8 +75,8 @@ set(PKG_CONFIG_DIR ${libdir}/pkgconfig)
 
 # --------------------------------------------------
 # Compiler Flags
-#ADD_DEFINITIONS("-D${FORTRAN_MANGLING}")
-ADD_DEFINITIONS("-DNoChange")
+ADD_DEFINITIONS("-D${FORTRAN_MANGLING}")
+#ADD_DEFINITIONS("-DNoChange")
 
 # --------------------------------------------------
 # ScaLAPACK needs BLAS and LAPACK
@@ -137,16 +137,16 @@ add_subdirectory(SRC)
 append_subdir_files(src "SRC")
 append_subdir_files(src-C "SRC")
 
-if (UNIX)
+if (NOT MSVC)
    add_library(scalapack ${blacs} ${tools} ${tools-C} ${extra_lapack} ${pblas} ${pblas-F} ${ptzblas} ${ptools} ${pbblas} ${redist} ${src} ${src-C})
-   target_link_libraries(scalapack PUBLIC lapack blas
-       ${MPI_C_LIBRARIES} ${MPI_Fortran_LIBRARIES})
-else() # Need to separate Fortran and C Code
-   #OPTION(BUILD_SHARED_LIBS "Build shared libraries" ON )
-   add_library(scalapack ${blacs} ${tools-C} ${pblas} ${ptools} ${redist} ${src-C})
-   target_link_libraries( scalapack PUBLIC lapack blas ${MPI_C_LIBRARIES} ${MPI_Fortran_LIBRARIES})
-   add_library(scalapack-F ${pblas-F} ${pbblas} ${ptzblas} ${tools} ${src} ${extra_lapack} )
-   target_link_libraries( scalapack-F PUBLIC lapack blas ${MPI_C_LIBRARIES} ${MPI_Fortran_LIBRARIES})
+   target_link_libraries(scalapack PUBLIC lapack blas ${MPI_C_LIBRARIES} ${MPI_Fortran_LIBRARIES})
+else() # Need to separate Fortran and C Code on MSVC windows (projects can only have single source types)
+   add_library(scalapack-C OBJECT ${blacs} ${tools-C} ${pblas} ${ptools} ${redist} ${src-C})
+   #target_link_libraries( scalapack-C PUBLIC lapack blas ${MPI_C_LIBRARIES} ${MPI_Fortran_LIBRARIES})
+   add_library(scalapack-F OBJECT ${pblas-F} ${pbblas} ${ptzblas} ${tools} ${src} ${extra_lapack} )
+   #target_link_libraries( scalapack-F PUBLIC lapack blas ${MPI_C_LIBRARIES} ${MPI_Fortran_LIBRARIES})
+   add_library(scalapack $<TARGET_OBJECTS:scalapack-C> $<TARGET_OBJECTS:scalapack-F>)
+   target_link_libraries(scalapack PUBLIC lapack blas ${MPI_C_LIBRARIES} ${MPI_Fortran_LIBRARIES})
 endif()
 
 set_target_properties(scalapack PROPERTIES OUTPUT_NAME scalapack-${SCALAPACK_VERSION})
