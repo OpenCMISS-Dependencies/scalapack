@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 project(SCALAPACK VERSION 2.8 LANGUAGES C Fortran)
 
 option(BUILD_TESTS "${PROJECT_NAME} - Build tests" ON)
+option(PACKAGE_CONFIG_DIR "Directory for package config files (relative to CMAKE_INSTALL_PREFIX)" "lib/cmake")
 option(FORTRAN_MANGLING "${PROJECT_NAME} - Fortran mangling scheme" Add_)
 set(BUILD_PRECISION sdcz CACHE STRING "${PROJECT_NAME} - Build precisions (sdcz)")
 
@@ -153,7 +154,7 @@ set_target_properties(scalapack PROPERTIES OUTPUT_NAME scalapack-${SCALAPACK_VER
 
 install(TARGETS scalapack EXPORT scalapack-config
     DESTINATION lib)
-install(EXPORT scalapack-config DESTINATION lib/cmake)
+install(EXPORT scalapack-config DESTINATION ${PACKAGE_CONFIG_DIR})
 include(CMakePackageConfigHelpers)
 WRITE_BASIC_PACKAGE_VERSION_FILE(${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-version.cmake COMPATIBILITY AnyNewerVersion)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-version.cmake
