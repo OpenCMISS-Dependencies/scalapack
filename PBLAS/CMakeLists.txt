@@ -1,3 +1,6 @@
 add_subdirectory(SRC)
-add_subdirectory(TESTING)
-add_subdirectory(TIMING)
+if (BUILD_TESTS)
+    add_subdirectory(TESTING)
+    add_subdirectory(TIMING)
+endif()
+
