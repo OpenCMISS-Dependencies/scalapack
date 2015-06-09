@@ -5,12 +5,51 @@ foreach(prec s d c z)
         set (matgen p${prec}matgen.f pmatgeninc.f)
         add_executable(x${prec}brd p${prec}brddriver.f p${prec}brdinfo.f p${prec}gebdrv.f p${prec}lafchk.f ${matgen})
         add_executable(x${prec}hrd p${prec}hrddriver.f p${prec}hrdinfo.f p${prec}gehdrv.f p${prec}lafchk.f ${matgen})
-        add_executable(x${prec}trd p${prec}trddriver.f p${prec}ttrdtester.f p${prec}latran.f p${prec}trdinfo.f p${prec}sytdrv.f p${prec}lafchk.f xpjlaenv.f ${matgen})
-        add_executable(x${prec}sep p${prec}septst.f p${prec}sepsubtst.f p${prec}sepchk.f p${prec}sepqtq.f p${prec}lagsy.f p${prec}latms.f p${prec}lasizesep.f p${prec}lasizesyevx.f p${prec}sepdriver.f p${prec}sepreq.f p${prec}sepinfo.f p${prec}lasizesyev.f p${prec}sqpsubtst.f p${prec}lasizesqp.f p${prec}sdpsubtst.f ${matgen})
-        add_executable(x${prec}gsep p${prec}gseptst.f p${prec}gsepsubtst.f p${prec}gsepchk.f p${prec}lagsy.f p${prec}latms.f p${prec}lasizesyevx.f p${prec}lasizegsep.f p${prec}lasizesep.f p${prec}gsepdriver.f p${prec}gsepreq.f p${prec}sepinfo.f ${matgen})
+        
+        set(SRC p${prec}trddriver.f p${prec}ttrdtester.f p${prec}latran.f p${prec}trdinfo.f p${prec}lafchk.f xpjlaenv.f ${matgen})
+        if (NOT ${prec} MATCHES [cz])
+            list(APPEND SRC p${prec}sytdrv.f)
+        else()
+            list(APPEND SRC p${prec}hetdrv.f)
+        endif()
+        add_executable(x${prec}trd ${SRC})
+        
+        set(SRC p${prec}septst.f p${prec}sepsubtst.f p${prec}sepchk.f p${prec}sepqtq.f p${prec}lagsy.f 
+            p${prec}latms.f p${prec}lasizesep.f  p${prec}sepdriver.f
+            p${prec}sepreq.f p${prec}sdpsubtst.f ${matgen})
+        if (NOT ${prec} MATCHES [cz])
+            list(APPEND SRC p${prec}lasizesyevx.f p${prec}lasizesyev.f 
+                p${prec}sepinfo.f p${prec}sqpsubtst.f
+                p${prec}lasizesqp.f)
+        else()
+            list(APPEND SRC p${prec}lasizeheevx.f p${prec}sepreq.f 
+            pdsepinfo.f pssepinfo.f p${prec}septst.f p${prec}sepsubtst.f p${prec}sdpsubtst.f
+            p${prec}sepchk.f p${prec}sepqtq.f)                
+        endif()
+        add_executable(x${prec}sep ${SRC})
+        
+        set(SRC p${prec}gseptst.f p${prec}gsepsubtst.f p${prec}gsepchk.f p${prec}lagsy.f
+            p${prec}latms.f p${prec}lasizegsep.f p${prec}lasizesep.f
+            p${prec}gsepdriver.f p${prec}gsepreq.f ${matgen})
+        if (NOT ${prec} MATCHES [cz])
+            list(APPEND SRC p${prec}lasizesyevx.f p${prec}sepinfo.f)
+        else()
+            list(APPEND SRC p${prec}lasizeheevx.f p${prec}sepreq.f 
+            pdsepinfo.f pssepinfo.f p${prec}septst.f p${prec}sepsubtst.f p${prec}sdpsubtst.f
+            p${prec}sepchk.f p${prec}sepqtq.f)
+        endif() 
+        add_executable(x${prec}gsep ${SRC})
         add_executable(x${prec}nep p${prec}nepdriver.f p${prec}nepinfo.f p${prec}nepfchk.f ${matgen})
-        add_executable(x${prec}syevr p${prec}lasizesepr.f p${prec}lasizesyevr.f p${prec}seprdriver.f p${prec}seprreq.f p${prec}seprsubtst.f
-            p${prec}sepchk.f p${prec}sepqtq.f p${prec}latms.f p${prec}seprtst.f p${prec}sepinfo.f p${prec}lagsy.f p${prec}lasizesep.f ${matgen})
+        
+        set(SRC p${prec}lasizesepr.f p${prec}seprdriver.f p${prec}seprreq.f p${prec}seprsubtst.f
+            p${prec}sepchk.f p${prec}sepqtq.f p${prec}latms.f p${prec}seprtst.f  
+            p${prec}lagsy.f p${prec}lasizesep.f ${matgen})
+        if (NOT ${prec} MATCHES [cz])
+            list(APPEND SRC p${prec}lasizesyevr.f p${prec}sepinfo.f)
+        else()
+            list(APPEND SRC p${prec}lasizeheevr.f pssepinfo.f p${prec}seprreq.f pdsepinfo.f)            
+        endif()
+        add_executable(x${prec}syevr ${SRC})
         target_link_libraries(x${prec}brd scalapack lapack blas)
         target_link_libraries(x${prec}hrd scalapack lapack blas)
         target_link_libraries(x${prec}trd scalapack lapack blas)
