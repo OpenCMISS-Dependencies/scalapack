@@ -3,15 +3,28 @@ project(SCALAPACK VERSION 2.8 LANGUAGES C Fortran)
 
 option(BUILD_TESTS "${PROJECT_NAME} - Build tests" ON)
 option(PACKAGE_CONFIG_DIR "Directory for package config files (relative to CMAKE_INSTALL_PREFIX)" "lib/cmake")
-option(FORTRAN_MANGLING "${PROJECT_NAME} - Fortran mangling scheme" Add_)
+if (NOT FORTRAN_MANGLING)
+    set(FORTRAN_MANGLING Add_ CACHE STRING "${PROJECT_NAME} - Fortran mangling scheme")
+endif()
 set(BUILD_PRECISION sdcz CACHE STRING "${PROJECT_NAME} - Build precisions (sdcz)")
 
 # Always build single precision (used by some tests [e.g. PETSc] and examples)
 set(BUILD_PRECISION "s${BUILD_PRECISION}")
 
-find_package(MPI REQUIRED)
 find_package(BLAS ${BLAS_VERSION} REQUIRED)
 find_package(LAPACK ${LAPACK_VERSION} REQUIRED)
+
+#
+#   MPI
+#
+find_package(MPI REQUIRED)
+include_directories(${MPI_INCLUDE_PATH})
+if (MPI_C_COMPILER)
+    set(CMAKE_C_COMPILER ${MPI_C_COMPILER})
+endif()
+if (MPI_Fortran_COMPILER)
+    set(CMAKE_Fortran_COMPILER ${MPI_Fortran_COMPILER})
+endif()
 
 # Configure the warning and code coverage suppression file
 configure_file( 
@@ -23,27 +36,11 @@ configure_file(
 # Add the CMake directory for custon CMake modules
 set(CMAKE_MODULE_PATH "${SCALAPACK_SOURCE_DIR}/CMAKE" ${CMAKE_MODULE_PATH})
 
-#
-#   MPI
-#
-if (MPI_FOUND)
-   INCLUDE_DIRECTORIES(${MPI_INCLUDE_PATH})
-   if (MPI_C_COMPILER)
-      SET(CMAKE_C_COMPILER "${MPI_C_COMPILER}")
-      message(STATUS "--> C Compiler : ${CMAKE_C_COMPILER}")
-   endif()
-   if (MPI_Fortran_COMPILER)
-      SET(Fortran_COMPILER "${CMAKE_Fortran_COMPILER}")
-      SET(CMAKE_Fortran_COMPILER "${MPI_Fortran_COMPILER}")
-      message(STATUS "--> Fortran Compiler : ${CMAKE_Fortran_COMPILER}")
+if (UNIX)
+   if (CMAKE_Fortran_COMPILER MATCHES "ifort" )
+      set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fltconsistency -fp_port" )
    endif()
 endif()
-
-if (UNIX)
-   if ( "${CMAKE_Fortran_COMPILER}" MATCHES "ifort" )
-      set( CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fltconsistency -fp_port" )
-   endif ()
-endif ()
 
 # --------------------------------------------------
 # Testing
@@ -77,7 +74,6 @@ set(PKG_CONFIG_DIR ${libdir}/pkgconfig)
 # --------------------------------------------------
 # Compiler Flags
 ADD_DEFINITIONS("-D${FORTRAN_MANGLING}")
-#ADD_DEFINITIONS("-DNoChange")
 
 # --------------------------------------------------
 # ScaLAPACK needs BLAS and LAPACK
