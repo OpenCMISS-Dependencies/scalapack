@@ -36,10 +36,8 @@ configure_file(
 # Add the CMake directory for custon CMake modules
 set(CMAKE_MODULE_PATH "${SCALAPACK_SOURCE_DIR}/CMAKE" ${CMAKE_MODULE_PATH})
 
-if (UNIX)
-   if (CMAKE_Fortran_COMPILER MATCHES "ifort" )
-      set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fltconsistency -fp_port" )
-   endif()
+if (UNIX AND CMAKE_Fortran_COMPILER_ID MATCHES Intel)
+  set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fltconsistency -fp_port" )
 endif()
 
 # --------------------------------------------------
@@ -134,19 +132,22 @@ add_subdirectory(SRC)
 append_subdir_files(src "SRC")
 append_subdir_files(src-C "SRC")
 
-if (NOT MSVC)
-   add_library(scalapack ${blacs} ${tools} ${tools-C} ${extra_lapack} ${pblas} ${pblas-F} ${ptzblas} ${ptools} ${pbblas} ${redist} ${src} ${src-C})
-   target_link_libraries(scalapack PUBLIC lapack blas ${MPI_C_LIBRARIES} ${MPI_Fortran_LIBRARIES})
-else() # Need to separate Fortran and C Code on MSVC windows (projects can only have single source types)
+# Need to separate Fortran and C Code on MSVC windows (projects can only have single source types)
+if (MSVC)
    add_library(scalapack-C OBJECT ${blacs} ${tools-C} ${pblas} ${ptools} ${redist} ${src-C})
-   #target_link_libraries( scalapack-C PUBLIC lapack blas ${MPI_C_LIBRARIES} ${MPI_Fortran_LIBRARIES})
    add_library(scalapack-F OBJECT ${pblas-F} ${pbblas} ${ptzblas} ${tools} ${src} ${extra_lapack} )
-   #target_link_libraries( scalapack-F PUBLIC lapack blas ${MPI_C_LIBRARIES} ${MPI_Fortran_LIBRARIES})
    add_library(scalapack $<TARGET_OBJECTS:scalapack-C> $<TARGET_OBJECTS:scalapack-F>)
-   target_link_libraries(scalapack PUBLIC lapack blas ${MPI_C_LIBRARIES} ${MPI_Fortran_LIBRARIES})
+else() 
+   add_library(scalapack ${blacs} ${tools} ${tools-C} ${extra_lapack} ${pblas} ${pblas-F} ${ptzblas} ${ptools} ${pbblas} ${redist} ${src} ${src-C})
 endif()
+target_link_libraries(scalapack PUBLIC lapack blas)
 
 set_target_properties(scalapack PROPERTIES OUTPUT_NAME scalapack-${SCALAPACK_VERSION})
+# Need to include mpi include dirs when no wrapper is present
+if (NOT MPI_C_COMPILER)
+    target_link_libraries(scalapack PUBLIC ${MPI_C_LIBRARIES} ${MPI_Fortran_LIBRARIES})
+    target_include_directories(scalapack PUBLIC ${MPI_C_INCLUDE_PATH} ${MPI_Fortran_INCLUDE_PATH})
+endif()
 
 install(TARGETS scalapack EXPORT scalapack-config
     DESTINATION lib)
