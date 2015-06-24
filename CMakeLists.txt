@@ -158,11 +158,11 @@ include(CMakePackageConfigHelpers)
 WRITE_BASIC_PACKAGE_VERSION_FILE(${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-version.cmake COMPATIBILITY AnyNewerVersion)
 file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-dependencies.cmake 
     "include(CMakeFindDependencyMacro)\r\n"
-    "set(_OLD_IMPORT_PREFIX \${_IMPORT_PREFIX})\r\n"
+    	"set(${PROJECT_NAME}_IMPORT_PREFIX \${_IMPORT_PREFIX})\r\n"
 )
 file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-dependencies.cmake "find_dependency(BLAS ${BLAS_VERSION})\r\n")
 file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-dependencies.cmake "find_dependency(LAPACK ${LAPACK_VERSION})\r\n")
-file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-dependencies.cmake "set(_IMPORT_PREFIX \${_OLD_IMPORT_PREFIX})")
+file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-dependencies.cmake "set(_IMPORT_PREFIX \${${PROJECT_NAME}_IMPORT_PREFIX})")
 install(FILES 
     ${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-version.cmake
     ${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-dependencies.cmake
