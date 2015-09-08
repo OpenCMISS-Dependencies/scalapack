@@ -18,12 +18,8 @@ find_package(LAPACK ${LAPACK_VERSION} REQUIRED)
 #   MPI
 #
 find_package(MPI REQUIRED)
-include_directories(${MPI_INCLUDE_PATH})
-if (MPI_C_COMPILER)
-    set(CMAKE_C_COMPILER ${MPI_C_COMPILER})
-endif()
-if (MPI_Fortran_COMPILER)
-    set(CMAKE_Fortran_COMPILER ${MPI_Fortran_COMPILER})
+if (NOT MPI_C_COMPILER)
+    include_directories(${MPI_INCLUDE_PATH})
 endif()
 
 # Configure the warning and code coverage suppression file
@@ -73,7 +69,7 @@ set(PKG_CONFIG_DIR ${libdir}/pkgconfig)
 
 # --------------------------------------------------
 # Compiler Flags
-ADD_DEFINITIONS("-D${FORTRAN_MANGLING}")
+add_definitions("-D${FORTRAN_MANGLING}")
 
 # --------------------------------------------------
 # ScaLAPACK needs BLAS and LAPACK
