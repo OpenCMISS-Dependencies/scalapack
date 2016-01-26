@@ -3,16 +3,12 @@ set(FTestObj
 
 add_executable(xFbtest ${FTestObj})
 target_link_libraries(xFbtest scalapack ${MPI_Fortran_LIBRARIES})
+add_library(xFbtest_lib ${FTestObj})
+target_link_libraries(xFbtest_lib PUBLIC scalapack ${MPI_Fortran_LIBRARIES})
 
-set(CTestObj  
-   Cbt.c)
-
-set_property(
-   SOURCE Cbt.c
-   APPEND PROPERTY COMPILE_DEFINITIONS BTCINTFACE
-   )
-
-add_executable(xCbtest ${CTestObj} ${FTestObj})
+add_executable(xCbtest Cbt.c)
+target_link_libraries(xCbtest xFbtest_lib)
+target_compile_definitions(xCbtest PRIVATE BTCINTFACE)
 target_link_libraries(xCbtest scalapack ${MPI_C_LIBRARIES})
 
 file(COPY bsbr.dat DESTINATION ${SCALAPACK_BINARY_DIR}/BLACS/TESTING)
