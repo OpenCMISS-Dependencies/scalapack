@@ -1,4 +1,5 @@
-add_library(pbtcom_c_tst PB_Cwarn.c PB_Cabort.c)
+
+add_library(pbtcom_c_tst "${CMAKE_CURRENT_SOURCE_DIR}/../SRC/PTOOLS/PB_Cwarn.c" "${CMAKE_CURRENT_SOURCE_DIR}/../SRC/PTOOLS/PB_Cabort.c")
 target_compile_definitions(pbtcom_c_tst PRIVATE TestingPblas)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${SCALAPACK_BINARY_DIR}/PBLAS/TESTING)
