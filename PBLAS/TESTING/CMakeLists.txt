@@ -1,3 +1,5 @@
+file(COPY ../SRC/PTOOLS/PB_Cwarn.c DESTINATION ${CMAKE_CURRENT_SOURCE_DIR})
+file(COPY ../SRC/PTOOLS/PB_Cabort.c DESTINATION ${CMAKE_CURRENT_SOURCE_DIR})
 add_library(pbtcom_c_tst PB_Cwarn.c PB_Cabort.c)
 target_compile_definitions(pbtcom_c_tst PRIVATE TestingPblas)
 
