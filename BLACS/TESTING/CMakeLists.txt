@@ -2,13 +2,16 @@ set(FTestObj
    blacstest.f btprim.f tools.f)
 
 add_executable(xFbtest ${FTestObj})
+target_include_directories(xFbtest PUBLIC ${MPI_Fortran_INCLUDE_PATH})
 target_link_libraries(xFbtest scalapack ${MPI_Fortran_LIBRARIES})
 
 add_library(xCbtest_c Cbt.c)
 target_compile_definitions(xCbtest_c PUBLIC BTCINTFACE)
+target_include_directories(xCbtest_c PUBLIC ${MPI_Fortran_INCLUDE_PATH})
 target_link_libraries(xCbtest_c PUBLIC scalapack ${MPI_C_LIBRARIES})
 
 add_executable(xCbtest ${FTestObj})
+target_include_directories(xCbtest PUBLIC ${MPI_Fortran_INCLUDE_PATH})
 target_link_libraries(xCbtest xCbtest_c)
 target_link_libraries(xCbtest ${MPI_Fortran_LIBRARIES})
 

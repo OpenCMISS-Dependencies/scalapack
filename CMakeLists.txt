@@ -44,7 +44,6 @@ if (BUILD_TESTS)
     SET(DART_TESTING_TIMEOUT 600)
     enable_testing()
     include(CTest)
-    enable_testing()
 endif()
 
 # --------------------------------------------------
@@ -138,14 +137,14 @@ if (MSVC)
 else() 
    add_library(scalapack ${blacs} ${tools} ${tools-C} ${extra_lapack} ${pblas} ${pblas-F} ${ptzblas} ${ptools} ${pbblas} ${redist} ${src} ${src-C})
 endif()
-target_link_libraries(scalapack PUBLIC lapack blas)
+target_link_libraries(scalapack PUBLIC ${LAPACK_LIBRARIES})
 
 set_target_properties(scalapack PROPERTIES OUTPUT_NAME scalapack-${SCALAPACK_VERSION})
 # Need to include mpi include dirs when no wrapper is present
-if (NOT MPI_C_COMPILER)
+#if (NOT MPI_C_COMPILER)
     target_link_libraries(scalapack PUBLIC ${MPI_C_LIBRARIES} ${MPI_Fortran_LIBRARIES})
     target_include_directories(scalapack PUBLIC ${MPI_C_INCLUDE_PATH} ${MPI_Fortran_INCLUDE_PATH})
-endif()
+#endif()
 
 install(TARGETS scalapack EXPORT scalapack-config
     DESTINATION lib)
