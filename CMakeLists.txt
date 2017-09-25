@@ -18,9 +18,6 @@ find_package(LAPACK ${LAPACK_VERSION} REQUIRED)
 #   MPI
 #
 find_package(MPI REQUIRED)
-if (NOT MPI_C_COMPILER)
-    include_directories(${MPI_INCLUDE_PATH})
-endif()
 
 # Configure the warning and code coverage suppression file
 configure_file( 
@@ -141,10 +138,8 @@ target_link_libraries(scalapack PUBLIC ${LAPACK_LIBRARIES})
 
 set_target_properties(scalapack PROPERTIES OUTPUT_NAME scalapack-${SCALAPACK_VERSION})
 # Need to include mpi include dirs when no wrapper is present
-#if (NOT MPI_C_COMPILER)
-    target_link_libraries(scalapack PUBLIC ${MPI_C_LIBRARIES} ${MPI_Fortran_LIBRARIES})
-    target_include_directories(scalapack PUBLIC ${MPI_C_INCLUDE_PATH} ${MPI_Fortran_INCLUDE_PATH})
-#endif()
+target_link_libraries(scalapack PUBLIC ${MPI_C_LIBRARIES} ${MPI_Fortran_LIBRARIES})
+target_include_directories(scalapack PUBLIC ${MPI_C_INCLUDE_PATH} ${MPI_Fortran_INCLUDE_PATH})
 
 install(TARGETS scalapack EXPORT scalapack-config
     DESTINATION lib)
