@@ -18,6 +18,13 @@ find_package(LAPACK ${LAPACK_VERSION} REQUIRED)
 #   MPI
 #
 find_package(MPI REQUIRED)
+if (NOT TARGET mpi-c AND NOT TARGET mpi-fortran)
+  message(ERROR "Using MPI without an 'mpi-c' or 'mpi-fortran' target set this must be implemented as an imported target for this to work.")
+  # Requires something like the following.
+  #add_library(mpi-c SHARED IMPORTED)
+  #set_property(TARGET mpi-c PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${MPI_INCLUDE_DIRS})
+  #set_property(TARGET mpi-c PROPERTY IMPORTED_LOCATION ${MPI_LIBRARY})
+endif ()
 
 # Configure the warning and code coverage suppression file
 configure_file( 
@@ -69,7 +76,7 @@ add_definitions("-D${FORTRAN_MANGLING}")
 
 # --------------------------------------------------
 # ScaLAPACK needs BLAS and LAPACK
-message(STATUS "CHECKING BLAS AND LAPACK LIBRARIES")
+message(STATUS "Checking BLAS and LAPACK libraries")
 
 include(CheckFortranFunctionExists)
 set(CMAKE_REQUIRED_LIBRARIES lapack)
@@ -134,12 +141,9 @@ if (MSVC)
 else() 
    add_library(scalapack ${blacs} ${tools} ${tools-C} ${extra_lapack} ${pblas} ${pblas-F} ${ptzblas} ${ptools} ${pbblas} ${redist} ${src} ${src-C})
 endif()
-target_link_libraries(scalapack PUBLIC ${LAPACK_LIBRARIES})
-
 set_target_properties(scalapack PROPERTIES OUTPUT_NAME scalapack-${SCALAPACK_VERSION})
-# Need to include mpi include dirs when no wrapper is present
-target_link_libraries(scalapack PUBLIC ${MPI_C_LIBRARIES} ${MPI_Fortran_LIBRARIES})
-target_include_directories(scalapack PUBLIC ${MPI_C_INCLUDE_PATH} ${MPI_Fortran_INCLUDE_PATH})
+
+target_link_libraries(scalapack PUBLIC lapack blas mpi-c mpi-fortran)
 
 install(TARGETS scalapack EXPORT scalapack-config
     DESTINATION lib)
@@ -152,6 +156,7 @@ file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-dependencies.cmake
 )
 file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-dependencies.cmake "find_dependency(BLAS ${BLAS_VERSION})\r\n")
 file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-dependencies.cmake "find_dependency(LAPACK ${LAPACK_VERSION})\r\n")
+file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-dependencies.cmake "find_dependency(MPI)\r\n")
 file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-dependencies.cmake "set(_IMPORT_PREFIX \${${PROJECT_NAME}_IMPORT_PREFIX})")
 install(FILES 
     ${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-version.cmake
