@@ -11,7 +11,6 @@ set(BUILD_PRECISION sdcz CACHE STRING "${PROJECT_NAME} - Build precisions (sdcz)
 # Always build single precision (used by some tests [e.g. PETSc] and examples)
 set(BUILD_PRECISION "s${BUILD_PRECISION}")
 
-find_package(BLAS ${BLAS_VERSION} REQUIRED)
 find_package(LAPACK ${LAPACK_VERSION} REQUIRED)
 
 #
@@ -154,7 +153,6 @@ file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-dependencies.cmake
     "include(CMakeFindDependencyMacro)\r\n"
     	"set(${PROJECT_NAME}_IMPORT_PREFIX \${_IMPORT_PREFIX})\r\n"
 )
-file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-dependencies.cmake "find_dependency(BLAS ${BLAS_VERSION})\r\n")
 file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-dependencies.cmake "find_dependency(LAPACK ${LAPACK_VERSION})\r\n")
 file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-dependencies.cmake "find_dependency(MPI)\r\n")
 file(APPEND ${CMAKE_CURRENT_BINARY_DIR}/scalapack-config-dependencies.cmake "set(_IMPORT_PREFIX \${${PROJECT_NAME}_IMPORT_PREFIX})")
