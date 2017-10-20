@@ -11,6 +11,8 @@ set(BUILD_PRECISION sdcz CACHE STRING "${PROJECT_NAME} - Build precisions (sdcz)
 # Always build single precision (used by some tests [e.g. PETSc] and examples)
 set(BUILD_PRECISION "s${BUILD_PRECISION}")
 
+# Find BLAS separately so we can use 'blas' target.
+find_package(BLAS ${BLAS_VERSION} REQUIRED)
 find_package(LAPACK ${LAPACK_VERSION} REQUIRED)
 
 #
