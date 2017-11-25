@@ -19,13 +19,6 @@ find_package(LAPACK ${LAPACK_VERSION} REQUIRED)
 #   MPI
 #
 find_package(MPI REQUIRED)
-if (NOT TARGET mpi-c AND NOT TARGET mpi-fortran)
-  message(ERROR "Using MPI without an 'mpi-c' or 'mpi-fortran' target set this must be implemented as an imported target for this to work.")
-  # Requires something like the following.
-  #add_library(mpi-c SHARED IMPORTED)
-  #set_property(TARGET mpi-c PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${MPI_INCLUDE_DIRS})
-  #set_property(TARGET mpi-c PROPERTY IMPORTED_LOCATION ${MPI_LIBRARY})
-endif ()
 
 # Configure the warning and code coverage suppression file
 configure_file( 
@@ -145,7 +138,7 @@ else()
 endif()
 set_target_properties(scalapack PROPERTIES OUTPUT_NAME scalapack-${SCALAPACK_VERSION})
 
-target_link_libraries(scalapack PUBLIC lapack blas mpi-c mpi-fortran)
+target_link_libraries(scalapack PUBLIC lapack blas MPI::MPI_C MPI::MPI_Fortran)
 
 install(TARGETS scalapack EXPORT scalapack-config
     DESTINATION lib)
