@@ -7,7 +7,6 @@ F_VOID_FUNC blacs_barrier_(int *ConTxt, F_CHAR scope)
 #endif
 {
    char tscope;
-   int ierr;
    BLACSCONTEXT *ctxt;
 
    tscope = F2C_CharTrans(scope);

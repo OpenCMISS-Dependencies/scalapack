@@ -1,6 +1,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+extern void Cblacs_gridinfo();
+extern void Cblacs_gridmap();
+extern void Cblacs_abort();
+extern void Cblacs_get();
+
 int SL_Cgridreshape(ctxt, pstart, row_major_in, row_major_out, P, Q)
 int ctxt, pstart, row_major_in, row_major_out, P, Q;
 {

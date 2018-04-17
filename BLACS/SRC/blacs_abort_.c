@@ -1,5 +1,7 @@
 #include "Bdef.h"
 
+extern void Cblacs_gridinfo();
+
 #if (INTFACE == C_CALL)
 void Cblacs_abort(int ConTxt, int ErrNo)
 #else

@@ -208,6 +208,7 @@ extern void Csetpvmtids();
 extern void Cblacs_get();
 extern void Cblacs_pinfo();
 extern void Cblacs_gridinfo();
+extern void Cblacs_gridmap();
 extern void Cblacs_gridinit();
 extern void Cblacs_exit();
 extern void Cblacs_gridexit();

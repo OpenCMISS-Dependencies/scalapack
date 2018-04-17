@@ -6,7 +6,6 @@ void Cblacs_gridexit(int ConTxt)
 F_VOID_FUNC blacs_gridexit_(int *ConTxt)
 #endif
 {
-   int i;
    BLACSCONTEXT *ctxt;
    extern int BI_MaxNCtxt;
    extern BLACSCONTEXT **BI_MyContxts;

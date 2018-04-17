@@ -15,7 +15,7 @@ column major (2) in the input and output grids */
    void Cblacs_gridmap();
 
    /** variables **/
-   int i, j;
+   int i;
    int nprow_in, npcol_in, myrow_in, mycol_in;
    int nprocs_new;
    int myrow_old, mycol_old, myrow_new, mycol_new;

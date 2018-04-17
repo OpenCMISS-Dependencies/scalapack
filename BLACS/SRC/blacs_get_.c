@@ -1,4 +1,7 @@
 #include "Bdef.h"
+
+extern void Cblacs_pinfo();
+
 #if (INTFACE == C_CALL)
 void Cblacs_get(int ConTxt, int what, int *val)
 #else
@@ -6,7 +9,6 @@ F_VOID_FUNC blacs_get_(int *ConTxt, int *what, int *val)
 #endif
 {
    int ierr, *iptr;
-   int comm;
    BLACSCONTEXT *ctxt;
 
    switch( Mpval(what) )

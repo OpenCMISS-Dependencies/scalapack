@@ -13,7 +13,7 @@ foreach(prec s d c z)
             list(APPEND SRC p${prec}hetdrv.f)
         endif()
         add_executable(x${prec}trd ${SRC})
-        
+
         set(SRC p${prec}septst.f p${prec}sepsubtst.f p${prec}sepchk.f p${prec}sepqtq.f p${prec}lagsy.f 
             p${prec}latms.f p${prec}lasizesep.f  p${prec}sepdriver.f
             p${prec}sepreq.f p${prec}sdpsubtst.f ${matgen})
@@ -24,7 +24,7 @@ foreach(prec s d c z)
         else()
             list(APPEND SRC p${prec}lasizeheevx.f p${prec}sepreq.f 
             pdsepinfo.f pssepinfo.f p${prec}septst.f p${prec}sepsubtst.f p${prec}sdpsubtst.f
-            p${prec}sepchk.f p${prec}sepqtq.f)                
+            p${prec}sepchk.f p${prec}sepqtq.f)
         endif()
         add_executable(x${prec}sep ${SRC})
         
@@ -47,9 +47,10 @@ foreach(prec s d c z)
         if (NOT ${prec} MATCHES [cz])
             list(APPEND SRC p${prec}lasizesyevr.f p${prec}sepinfo.f)
         else()
-            list(APPEND SRC p${prec}lasizeheevr.f pssepinfo.f p${prec}seprreq.f pdsepinfo.f)            
+            list(APPEND SRC p${prec}lasizeheevr.f pssepinfo.f p${prec}seprreq.f pdsepinfo.f)
         endif()
         add_executable(x${prec}syevr ${SRC})
+
         target_link_libraries(x${prec}brd scalapack)
         target_link_libraries(x${prec}hrd scalapack)
         target_link_libraries(x${prec}trd scalapack)

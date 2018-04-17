@@ -1,6 +1,5 @@
 #include "Bdef.h"
 
-
 #if (INTFACE == C_CALL)
 void Cigsum2d(int ConTxt, char *scope, char *top, int m, int n, int *A,
               int lda, int rdest, int cdest)
@@ -79,7 +78,7 @@ F_VOID_FUNC igsum2d_(int *ConTxt, F_CHAR scope, F_CHAR top, int *m, int *n,
    BLACBUFF *bp, *bp2;
    BLACSCONTEXT *ctxt;
    char ttop, tscope;
-   int N, length, dest, tlda, trdest, ierr, itr;
+   int N, length, dest, tlda, trdest, ierr;
    extern BLACBUFF *BI_ActiveQ;
    extern BLACBUFF BI_AuxBuff;
 

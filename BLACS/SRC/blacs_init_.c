@@ -1,5 +1,8 @@
 #include "Bdef.h"
 
+extern void Cblacs_gridmap();
+extern void Cblacs_get();
+
 #if (INTFACE == C_CALL)
 void Cblacs_gridinit(int *ConTxt, char *order, int nprow, int npcol)
 #else

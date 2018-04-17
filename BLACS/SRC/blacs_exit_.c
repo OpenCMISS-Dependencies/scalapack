@@ -1,5 +1,7 @@
 #include "Bdef.h"
 
+extern void Cblacs_gridexit();
+
 #if (INTFACE == C_CALL)
 void Cblacs_exit(int NotDone)
 #else

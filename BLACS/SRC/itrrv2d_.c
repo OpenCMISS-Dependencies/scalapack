@@ -71,8 +71,7 @@ F_VOID_FUNC itrrv2d_(int *ConTxt, F_CHAR uplo, F_CHAR diag, int *m, int *n,
    BLACBUFF *BI_GetBuff(int);
    int BI_BuffIsFree(BLACBUFF *, int);
    int tuplo, tdiag, tlda;
-   int ierr, length;
-   BLACBUFF *bp;
+   int ierr;
    MPI_Datatype MatTyp;
    BLACSCONTEXT *ctxt;
    extern BLACBUFF BI_AuxBuff, *BI_ActiveQ;

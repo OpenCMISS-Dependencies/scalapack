@@ -68,7 +68,7 @@ F_VOID_FUNC ztrsd2d_(int *ConTxt, F_CHAR uplo, F_CHAR diag, int *m, int *n,
    int BI_BuffIsFree(BLACBUFF *, int);
 
    char tuplo, tdiag;
-   int dest, length, tlda, ierr;
+   int dest, tlda, ierr;
    BLACBUFF *bp;
    BLACSCONTEXT *ctxt;
    MPI_Datatype MatTyp;

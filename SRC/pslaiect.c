@@ -52,7 +52,7 @@ void pslasnbt_( int *ieflag )
 *  .. Local Scalars ..
 */
    float x;
-   int         negone=-1, errornum;
+   int         negone=-1;
    unsigned int *ix; 
 /* ..
 *  .. Executable Statements ..
@@ -177,8 +177,8 @@ void pslachkieee_( int *isieee, float *rmax, float *rmin )
 *
 *  .. Local Scalars ..
 */
-   float x, pinf, pzero, ninf, nzero;
-   int         ieflag, *ix, sbit1, sbit2, negone=-1, errornum;
+   float pinf, pzero, ninf, nzero;
+   int         ieflag, sbit1, sbit2, negone=-1;
 /* ..
 *  .. Executable Statements ..
 */

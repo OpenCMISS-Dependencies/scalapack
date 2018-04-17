@@ -1,5 +1,8 @@
 #include "Bdef.h"
 
+extern void Cblacs_pinfo();
+extern void Cblacs_get();
+
 #if (INTFACE == C_CALL)
 void Cblacs_gridmap(int *ConTxt, int *usermap, int ldup, int nprow0, int npcol0)
 #else
@@ -11,11 +14,14 @@ F_VOID_FUNC blacs_gridmap_(int *ConTxt, int *usermap, int *ldup, int *nprow0,
    MPI_Comm Cblacs2sys_handle(int BlacsCtxt);
    MPI_Comm BI_TransUserComm(int, int, int *);
 
-   int info, i, j, Iam, *iptr;
+   int i, j, Iam, *iptr;
    int myrow, mycol, nprow, npcol, Ng;
    BLACSCONTEXT *ctxt, **tCTxts;
-   MPI_Comm comm, tcomm;
+   MPI_Comm comm;
+#if (INTFACE == C_CALL)
+   MPI_Comm tcomm;
    MPI_Group grp, tgrp;
+#endif
 
    extern BLACSCONTEXT **BI_MyContxts;
    extern BLACBUFF BI_AuxBuff;

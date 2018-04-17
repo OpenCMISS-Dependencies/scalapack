@@ -7,7 +7,7 @@ void free_blacs_system_handle_(int *ISysCxt)
 #endif
 {
 #if (INTFACE == C_CALL)
-   int i, j, DEF_WORLD;
+   int i, j;
    MPI_Comm *tSysCtxt;
    extern int BI_MaxNSysCtxt;
    extern MPI_Comm *BI_SysContxts;
